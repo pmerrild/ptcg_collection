@@ -1,0 +1,10 @@
+README.md
+setup.py
+src/ptcg_collection/__init__.py
+src/ptcg_collection/main.py
+src/ptcg_collection.egg-info/PKG-INFO
+src/ptcg_collection.egg-info/SOURCES.txt
+src/ptcg_collection.egg-info/dependency_links.txt
+src/ptcg_collection.egg-info/entry_points.txt
+src/ptcg_collection.egg-info/requires.txt
+src/ptcg_collection.egg-info/top_level.txt

@@ -1,0 +1,14 @@
+# The main pipeline for ptcg_collection
+resources:
+  pipelines:
+    ptcg_collection_pipeline:
+      name: ptcg_collection_pipeline
+      catalog: workspace
+      schema: ptcg_collection_${bundle.target}
+      serverless: true
+      libraries:
+        - notebook:
+            path: ../src/dlt_pipeline.ipynb
+
+      configuration:
+        bundle.sourcePath: ${workspace.file_path}/src

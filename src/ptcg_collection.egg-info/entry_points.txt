@@ -1,0 +1,2 @@
+[packages]
+main = ptcg_collection.main:main

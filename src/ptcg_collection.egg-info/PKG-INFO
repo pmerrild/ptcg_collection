@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: ptcg_collection
+Version: 0.0.1+20250630.214336
+Summary: wheel file based on ptcg_collection/src
+Home-page: https://databricks.com
+Author: peter.nielsen22@gmail.com
+Requires-Dist: setuptools

@@ -9,7 +9,8 @@ databricks-dlt
 ## pytest is the default package used for testing
 pytest
 
-pokemontcgsdk
+## HTTP client for calling Pokemon TCG REST APIs (replaces deprecated pokemontcgsdk)
+requests>=2.28.0
 
 ## Dependencies for building wheel files
 setuptools

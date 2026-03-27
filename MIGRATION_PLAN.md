@@ -36,7 +36,7 @@ Alternative APIs that were evaluated:
 - Register at https://poke.church and create an API key.
 - Store the key in Databricks Secrets under the existing scope:
   ```bash
-  databricks secrets put-secret my_scope POKEMON_API_KEY
+  databricks secrets put-secret --scope my_scope --key POKEMON_API_KEY --string-value "<your-poke-church-api-key>"
   ```
   (Replace the old `pokemontcgsdk` key with the new poke.church Bearer token.)
 

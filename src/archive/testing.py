@@ -1,4 +1,10 @@
-#pip install pokemontcgsdk
+# DEPRECATED - This file used the pokemontcgsdk which relies on the api.pokemontcg.io API
+# that is no longer supported. Please use the updated notebook in
+# src/01 bronze_all_cards_API.ipynb which calls the poke.church REST API directly.
+#
+# Kept for historical reference only.
+
+#pip install requests
 #dbutils.library.restartPython()
 
 import os

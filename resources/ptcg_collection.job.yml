@@ -15,31 +15,17 @@ resources:
       #    - your_email@example.com
 
       tasks:
-        - task_key: notebook_task
+        - task_key: bronze_ingestion
           notebook_task:
-            notebook_path: ../src/notebook.ipynb
+            # Fetches all sets and cards from the poke.church REST API and writes
+            # them to workspace.pokemon_tcg_collection.tcg_all_sets and
+            # workspace.pokemon_tcg_collection.tcg_all_cards (Delta).
+            notebook_path: ../src/01 bronze_all_cards_API.ipynb
 
-        - task_key: refresh_pipeline
+        - task_key: silver_processing
           depends_on:
-            - task_key: notebook_task
-          pipeline_task:
-            pipeline_id: ${resources.pipelines.ptcg_collection_pipeline.id}
-
-        - task_key: main_task
-          depends_on:
-            - task_key: refresh_pipeline
-          environment_key: default
-          python_wheel_task:
-            package_name: ptcg_collection
-            entry_point: main
-
-      # A list of task execution environment specifications that can be referenced by tasks of this job.
-      environments:
-        - environment_key: default
-
-          # Full documentation of this spec can be found at:
-          # https://docs.databricks.com/api/workspace/jobs/create#environments-spec
-          spec:
-            client: "2"
-            dependencies:
-              - ../dist/*.whl
+            - task_key: bronze_ingestion
+          notebook_task:
+            # Joins the ingested card/set data with the personal collection CSV
+            # and writes the result to workspace.pokemon_tcg_collection.silver_tcg_collection.
+            notebook_path: ../src/02 silver_own_collection.ipynb

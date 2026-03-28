@@ -27,5 +27,5 @@ resources:
             - task_key: bronze_ingestion
           notebook_task:
             # Joins the ingested card/set data with the personal collection CSV
-            # and writes the result to workspace.pokemon_tcg_collection.silver_tcg_collection.
+            # to produce an enriched view of the personal collection (currently SELECT-only; no table write).
             notebook_path: ../src/02 silver_own_collection.ipynb

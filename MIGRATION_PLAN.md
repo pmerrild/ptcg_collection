@@ -84,7 +84,13 @@ override `CASE` statements in the SQL cells of `src/01 bronze_all_cards_API.ipyn
 
 `resources/ptcg_collection.job.yml` has been updated to run the bronze and silver
 notebooks in the correct order (`bronze_ingestion` → `silver_processing`).
-The old sample-notebook / DLT-pipeline / Python-wheel-task chain has been removed.
+The old sample-notebook / DLT-pipeline / Python-wheel-task chain has been removed, and
+`resources/ptcg_collection.pipeline.yml` has been removed from `databricks.yml`
+so the unused DLT pipeline is no longer deployed.
+
+The notebooks and job are now parameterized via the `target_schema` bundle variable
+(`pokemon_tcg_collection_dev` in dev, `pokemon_tcg_collection` in prod) so that
+development runs cannot accidentally overwrite production tables.
 
 Once the key is stored and the notebooks have been validated, deploy with:
 ```bash

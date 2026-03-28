@@ -22,14 +22,20 @@ resources:
             node_type_id: r5.xlarge
             num_workers: 1
 
+      parameters:
+        - name: target_schema
+          default: ${var.target_schema}
+
       tasks:
         - task_key: bronze_ingestion
           job_cluster_key: main_cluster
           notebook_task:
             # Fetches all sets and cards from the poke.church REST API and writes
-            # them to workspace.pokemon_tcg_collection.tcg_all_sets and
-            # workspace.pokemon_tcg_collection.tcg_all_cards (Delta).
+            # them to workspace.<target_schema>.tcg_all_sets and
+            # workspace.<target_schema>.tcg_all_cards (Delta).
             notebook_path: ../src/01 bronze_all_cards_API.ipynb
+            base_parameters:
+              target_schema: "{{job.parameters.target_schema}}"
 
         - task_key: silver_processing
           job_cluster_key: main_cluster
@@ -39,3 +45,5 @@ resources:
             # Joins the ingested card/set data with the personal collection CSV
             # to produce an enriched view of the personal collection (currently SELECT-only; no table write).
             notebook_path: ../src/02 silver_own_collection.ipynb
+            base_parameters:
+              target_schema: "{{job.parameters.target_schema}}"

@@ -26,6 +26,9 @@ Alternative APIs that were evaluated:
   - Cards ingestion cell now calls `https://api.poke.church/v1/cards` with pagination
   - Both cells use the existing Databricks secret `POKEMON_API_KEY` (same secret scope `my_scope`)
 - [x] Marked `src/archive/testing.py` as deprecated
+- [x] Updated `resources/ptcg_collection.job.yml` to trigger the bronze and silver notebooks
+  (`bronze_ingestion` → `silver_processing`) instead of the old sample-notebook / DLT-pipeline /
+  Python-wheel-task chain.
 
 ---
 
@@ -77,14 +80,20 @@ collection and the freshly ingested card/set data still produces correct results
 Pay special attention to the `ptcgoCode` → `set.id` mapping logic and the set-code
 override `CASE` statements in the SQL cells of `src/01 bronze_all_cards_API.ipynb`.
 
-### 5. Update the Databricks Job
+### 5. ~~Update the Databricks Job~~ ✅ Done
 
-Confirm that the daily job (`resources/ptcg_collection.job.yml`) triggers the
-correct notebooks and that the wheel dependency in `resources/ptcg_collection.job.yml`
-still references the right dist artifact after rebuilding:
+`resources/ptcg_collection.job.yml` has been updated to run the bronze and silver
+notebooks in the correct order (`bronze_ingestion` → `silver_processing`).
+The old sample-notebook / DLT-pipeline / Python-wheel-task chain has been removed, and
+`resources/ptcg_collection.pipeline.yml` has been removed from `databricks.yml`
+so the unused DLT pipeline is no longer deployed.
+
+The notebooks and job are now parameterized via the `target_schema` bundle variable
+(`pokemon_tcg_collection_dev` in dev, `pokemon_tcg_collection` in prod) so that
+development runs cannot accidentally overwrite production tables.
+
+Once the key is stored and the notebooks have been validated, deploy with:
 ```bash
-pip install build
-python -m build
 databricks bundle deploy --target prod
 ```
 

@@ -7,10 +7,16 @@ bundle:
   uuid: af113222-4248-4c11-a599-8cb8f493e2d0
 
 include:
-  # Include all YAML files in the resources directory and its subdirectories.
-  # This is where you define your Databricks assets like notebooks, jobs, etc.
-- resources/*.yml
-- resources/*/*.yml
+  # Explicitly include only the job definition; the DLT pipeline has been
+  # removed as part of the poke.church migration (see MIGRATION_PLAN.md).
+- resources/ptcg_collection.job.yml
+
+variables:
+  # Unity Catalog schema used by the bronze and silver notebooks.
+  # Overridden to a dev-specific schema in the 'dev' target so that
+  # development runs never overwrite production tables.
+  target_schema:
+    default: pokemon_tcg_collection
 
 targets:
   dev:
@@ -22,6 +28,8 @@ targets:
     default: true
     workspace:
       host: https://dbc-5bffcd4b-bc65.cloud.databricks.com
+    variables:
+      target_schema: pokemon_tcg_collection_dev
 
   prod:
     mode: production
@@ -32,3 +40,5 @@ targets:
     permissions:
       - user_name: peter.nielsen22@gmail.com
         level: CAN_MANAGE
+    variables:
+      target_schema: pokemon_tcg_collection

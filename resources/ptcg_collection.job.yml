@@ -14,8 +14,17 @@ resources:
       #  on_failure:
       #    - your_email@example.com
 
+      job_clusters:
+        - job_cluster_key: main_cluster
+          new_cluster:
+            # Databricks Runtime 15.4 LTS matches the databricks-connect version used in dev.
+            spark_version: 15.4.x-scala2.12
+            node_type_id: r5.xlarge
+            num_workers: 1
+
       tasks:
         - task_key: bronze_ingestion
+          job_cluster_key: main_cluster
           notebook_task:
             # Fetches all sets and cards from the poke.church REST API and writes
             # them to workspace.pokemon_tcg_collection.tcg_all_sets and
@@ -23,6 +32,7 @@ resources:
             notebook_path: ../src/01 bronze_all_cards_API.ipynb
 
         - task_key: silver_processing
+          job_cluster_key: main_cluster
           depends_on:
             - task_key: bronze_ingestion
           notebook_task:
